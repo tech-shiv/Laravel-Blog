@@ -96,7 +96,36 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $data = $request->validate([
+            'name' => 'required',
+            'slug' => 'required',
+            'description' => 'required',
+            'meta_title' => 'required',
+            'meta_description' => 'required',
+            'meta_keywords' => 'required',
+            'navbar_status' => 'required',
+            'status' => 'required',
+        ]);
+
+        $category->name = $data['name'];
+        $category->slug = $data['slug'];
+        $category->description = $data['description'];
+        if($request->hasfile('image')){
+            $file = $request->file('image');
+            $filename = time(). '.' .$file->getClientOriginalExtension();
+            $file->move(public_path().'/uploads/category/', $filename);
+            $category->image = $filename;
+        }
+
+        $category->meta_title = $data['meta_title'];
+        $category->meta_description = $data['meta_description'];
+        $category->meta_keywords = $data['meta_keywords'];
+
+        $category->navbar_status = $request->navbar_status == true ? '1' : '0';
+        $category->status = $request->status == true ? '1' : '0';
+        $category->created_by  = Auth::user()->id;
+        $category->save();
     }
 
     /**
@@ -107,6 +136,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+
+        $category = Category::find($id);
+        $category->delete();
+        return redirect()->route('category')->with('success', 'Category deleted successfully');
     }
 }

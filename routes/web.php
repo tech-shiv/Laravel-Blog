@@ -35,6 +35,9 @@ Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::post('add-category', [CategoryController::class, 'store']);
 });
 
+// Route::fallback(function () {
+//     return view('errors.404');
+// });
 
 Route::get('/login/{social}', 'Auth\LoginController@socialLogin')->where('social', 'facebook|google|github');
 Route::get('/login/{social}/callback', 'Auth\LoginController@handleProviderCallback')->where('social', 'facebook|google|github');

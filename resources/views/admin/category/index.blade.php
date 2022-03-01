@@ -32,15 +32,23 @@
                         </thead>
                         <tbody>
                             @foreach ($category as $item)
-                                <tr>
+                                <tr class="itemT">
                                     <td> {{ $item->id }} </td>
                                     <td> {{ $item->name }} </td>
                                     <td>
-                                        <img src="{{ public_path('uploads/category/'.$item->image) }}" width="50px" height="50px" alt="img">
+                                        <img src="{{ url('uploads/category/' . $item->image) }}" style="max-width: 100px;"
+                                            alt="img">
                                     </td>
-                                    <td> {{ $item->status == '1' ? 'Hidden':'Shown' }} </td>
+                                    <td> {{ $item->status == '1' ? 'Hidden' : 'Shown' }} </td>
                                     <td>
-                                        <a href="http://" class="btn btn-success">Edit</a>
+                                        <a href="http://" class="btn btn-primary edit-cat">
+                                            <i class="fas fa-edit"></i>
+                                            Edit
+                                        </a>
+                                        <a href="http://" class="btn btn-danger del-cat">
+                                            <i class="fas fa-trash-alt"></i>
+                                            Delete
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
@@ -51,4 +59,40 @@
         </div>
     </div>
     <!-- /.container-fluid -->
+    <style>
+        thead tr {
+            text-align: center;
+        }
+
+        .itemT td {
+            vertical-align: middle;
+            text-align: center;
+            width: 0%;
+        }
+
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            $('.del-cat').click(function(e) {
+                e.preventDefault();
+                var url = $(this).attr('href');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href = url;
+                    }
+                })
+            });
+        });
+
+
+    </script>
 @endsection
