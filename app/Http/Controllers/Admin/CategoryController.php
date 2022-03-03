@@ -97,23 +97,12 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        echo $id;
-        die;
         $category = Category::find($id);
-        $data = $request->validate([
-            'name' => 'required',
-            'slug' => 'required',
-            'description' => 'required',
-            'meta_title' => 'required',
-            'meta_description' => 'required',
-            'meta_keywords' => 'required',
-            'navbar_status' => 'required',
-            'status' => 'required',
-        ]);
+        $data = $request->all();
 
-        $category->name = $data['name'];
-        $category->slug = $data['slug'];
-        $category->description = $data['description'];
+        $category->name = $data['catName'];
+        $category->slug = $data['catSlug'];
+        $category->description = $data['catDescription'];
         if ($request->hasfile('image')) {
             $file = $request->file('image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
@@ -121,13 +110,10 @@ class CategoryController extends Controller
             $category->image = $filename;
         }
 
-        $category->meta_title = $data['meta_title'];
-        $category->meta_description = $data['meta_description'];
-        $category->meta_keywords = $data['meta_keywords'];
-
-        $category->navbar_status = $request->navbar_status == true ? '1' : '0';
-        $category->status = $request->status == true ? '1' : '0';
-        $category->created_by  = Auth::user()->id;
+        $category->meta_title = $data['metaTitle'];
+        $category->meta_description = $data['metaDescription'];
+        $category->meta_keywords = $data['metaKeywords'];
+        $category->status = $data['status'] == true ? '1' : '0';
         $category->save();
 
         return redirect()->route('category')->with('success', 'Category updated successfully');
