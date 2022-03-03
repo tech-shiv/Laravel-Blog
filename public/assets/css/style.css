@@ -12609,3 +12609,27 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
     width: 100%;
 }
+.fruit-modal .modal button.close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: #4e73df;
+    opacity: 1;
+    color: #fff;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    font-weight: 500;
+    border-radius: 50%;
+    line-height: 40px;
+    z-index: 11;
+}
+.fruit-modal .modal .modal-body {
+    padding: 21px 24px;
+}
+.fruit-modal .modal .modal-body label {
+    color: #838383;
+    font-weight: 600;
+    letter-spacing: 1px;
+    font-size: 15px;
+}

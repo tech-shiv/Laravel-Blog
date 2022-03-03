@@ -46,10 +46,10 @@ class CategoryController extends Controller
         $category->name = $data['name'];
         $category->slug = $data['slug'];
         $category->description = $data['description'];
-        if($request->hasfile('image')){
+        if ($request->hasfile('image')) {
             $file = $request->file('image');
-            $filename = time(). '.' .$file->getClientOriginalExtension();
-            $file->move(public_path().'/uploads/category/', $filename);
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/uploads/category/', $filename);
             $category->image = $filename;
         }
 
@@ -84,7 +84,8 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return $category->toJson();
     }
 
     /**
@@ -96,6 +97,8 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
+        echo $id;
+        die;
         $category = Category::find($id);
         $data = $request->validate([
             'name' => 'required',
@@ -111,10 +114,10 @@ class CategoryController extends Controller
         $category->name = $data['name'];
         $category->slug = $data['slug'];
         $category->description = $data['description'];
-        if($request->hasfile('image')){
+        if ($request->hasfile('image')) {
             $file = $request->file('image');
-            $filename = time(). '.' .$file->getClientOriginalExtension();
-            $file->move(public_path().'/uploads/category/', $filename);
+            $filename = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path() . '/uploads/category/', $filename);
             $category->image = $filename;
         }
 
@@ -126,6 +129,8 @@ class CategoryController extends Controller
         $category->status = $request->status == true ? '1' : '0';
         $category->created_by  = Auth::user()->id;
         $category->save();
+
+        return redirect()->route('category')->with('success', 'Category updated successfully');
     }
 
     /**
@@ -136,7 +141,6 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-
         $category = Category::find($id);
         $category->delete();
         return redirect()->route('category')->with('success', 'Category deleted successfully');

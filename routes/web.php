@@ -29,10 +29,15 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::prefix('admin')->middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('category', [CategoryController::class, 'index']);
+    Route::get('category', [CategoryController::class, 'index'])->name('category');
     Route::get('add-category', [CategoryController::class, 'create']);
 
     Route::post('add-category', [CategoryController::class, 'store']);
+    Route::any('edit-category/{id}', [CategoryController::class, 'edit']);
+
+    Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
+
+    Route::post('delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
 });
 
 // Route::fallback(function () {

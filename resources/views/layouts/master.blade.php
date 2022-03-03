@@ -13,10 +13,10 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"
-        type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet">
 </head>
 
@@ -64,6 +64,44 @@
     <script src="{{ asset('assets/js/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            jQuery('.edit-cat').click(function() {
+                jQuery('#edit-cat').modal('show');
+                var id = jQuery(this).val();
+                jQuery.ajax({
+                    url: "{{ url('admin/edit-category') }}" + '/' + id,
+                    method: 'POST',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        id: id
+                    },
+                    success: function(result) {
+                        console.log(JSON.parse(result));
+
+                        let catData = JSON.parse(result);
+                        $("#catId").val(catData.id);
+                        $("#catName").val(catData.name);
+                        $("#catDescription").val(catData.description);
+                        $("#catSlug").val(catData.slug);
+                        $("#categoryId").val(catData.item_category_id);
+                        $("#metaTitle").val(catData.meta_title);
+                        $("#metaDescription").val(catData.meta_description);
+                        $("#metaKeywords").val(catData.meta_keywords);
+                        $("#catImage").attr('src', "{{url('uploads/category')}}" + '/' + catData.image);
+                        $("#catUpdateForm").attr('action', "{{ url('admin/update') }}" + '/' + catData.id);
+                    }
+                });
+            });
+
+            jQuery('.delete-cat').click(function() {
+                jQuery('#deleteModalCenter').modal('show');
+                var id = jQuery(this).val();
+                jQuery('#deleteCatForm').attr('action', "{{ url('admin/delete') }}" + '/' + id);
+            });
+
+        });
+    </script>
 </body>
 
 </html>
